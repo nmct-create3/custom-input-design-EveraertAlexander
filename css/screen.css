@@ -44,7 +44,9 @@
     --global-borderWidth: 1px;
 
     /* transitions */
-    --global-transitionTiming-alpha: .1s ease-out;
+    --transition-alpha: .2s;
+    --global-transitionTiming-alpha: all .2s cubic-bezier(0.170, 0.330, 0.265, 1.430);
+
 
     /* Baseline settings */
     --global-baseline: 8px;         
@@ -56,6 +58,15 @@
     --global-whitespace-lg: calc(var(--global-baseline) * 4); /*  = 32px */
     --global-whitespace-xl: calc(var(--global-whitespace) * 2); /*  = 48px */
     --global-whitespace-xxl: calc(var(--global-whitespace) * 3); /*  = 72px */
+
+    --global-input-backgroundColor: White;
+
+    /* inputs */
+    --global-input-color: var(--global-color-neutral-xxxx-dark);
+    --global-input-borderColor: var(--global-color-neutral-xxx-light);
+    --global-input-hover-borderColor: var(--global-color-neutral-xx-light);
+    --global-input-focus-borderColor: var(--global-color-alpha);
+    --global-input-boxShadow: 0 0 0 3px var(--global-color-alpha-x-transparent);
 }
 
 /*------------------------------------*\
@@ -601,10 +612,10 @@ input::placeholder {
     -moz-appearance: none;
     appearance: none;
     width: 100%;
-    border: var(--global-borderWidth) solid var(--global-color-neutral-xxx-light);
+    border: var(--global-borderWidth) solid var(--global-input-borderColor);
     border-radius: var(--global-borderRadius);
-    color: var(--global-color-neutral-xxxx-dark);
-    background-color: White;
+    color: var(--global-input-color);
+    background-color: var(--global-input-backgroundColor);
     font-family: inherit;
     font-size: 16px;
     line-height: calc(var(--global-baseline) * 3);
@@ -628,6 +639,188 @@ input::placeholder {
 .c-option {
     margin-right: var(--global-whitespace-sm);
 }
+
+.c-option-list {
+    margin-bottom: 24px;
+}
+
+.c-option-list__item {
+    margin-bottom: 12px;
+}
+
+.c-custom-option {
+    --custom-option-borderColor: var(--global-input-borderColor);
+    --custom-option-hover-borderColor: var(--global-input-hover-borderColor);
+    --custom-option-focus-borderColor: var(--global-input-focus-borderColor);
+    display: flex;
+}
+
+.c-custom-option__symbol {
+    opacity: 0;
+    transform: scale(0);
+    display: block;
+}
+
+.c-custom-option__fake-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 16px;
+    height: 16px;
+    border: var(--global-borderWidth) solid var(--custom-option-borderColor);
+    background-color: var(--global-input-backgroundColor);
+    margin-right: 8px;
+}
+
+.c-custom-option__fake-input--checkbox {
+    border-radius: var(--global-borderRadius);
+}
+
+.c-custom-option__fake-input--radio {
+    border-radius: 100%;
+}
+
+
+.c-option--hidden:focus + .c-custom-option .c-custom-option__fake-input,
+.c-option--hidden:active + .c-custom-option .c-custom-option__fake-input {
+
+    box-shadow: var(--global-input-boxShadow);
+    border: var(--global-borderWidth) solid var(--global-input-focus-borderColor);
+  }
+
+  .c-custom-option:hover {
+    --custom-option-borderColor: var(--custom-option-hover-borderColor);
+  }
+
+  .c-option--hidden:checked + .c-custom-option .c-custom-option__symbol {
+    opacity: 100%;
+    transform: scale(1);
+    transition: var(--global-transitionTiming-alpha)
+
+  }
+
+  .c-custom-option__fake-input--checkbox .c-custom-option__symbol {
+    /* Stuff for the checkbox icon... */
+    width: 10px;
+    height: 10px;
+    fill: var(--global-color-alpha);
+  }
+  
+  .c-custom-option__fake-input--radio .c-custom-option__symbol {
+    /* Stuff for the radio button icon... */
+    width: 6px;
+    height: 6px;
+    background-color: var(--global-color-alpha);
+    border-radius: 100%;
+  }
+
+
+/*
+    Component: Custom Toggle
+    ---
+    Class to put on all form labels
+*/
+.c-custom-toggle {
+    display: flex;
+    align-items: center;
+    --custom-toggle-borderColor: var(--global-input-borderColor);
+    --custom-toggle-hover-borderColor: var(--global-input-hover-borderColor);
+    --custom-toggle-focus-borderColor: var(--global-input-focus-borderColor);
+}
+
+
+.c-custom-toggle__fake-input{
+    display: block;
+    width: 48px;
+    height: 24px;
+    background-color: var(--global-color-neutral-xxxx-light);
+    border: var(--global-borderWidth) solid var(--custom-toggle-borderColor);
+    border-radius: 24px;
+    margin-right: 8px;
+    transition: all var(--transition-alpha);
+}
+
+.c-custom-toggle__fake-input::after {
+    display: block;
+    content: '';
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    box-shadow: 0 0 3px #00000029;
+    border-radius: 22px;
+    transform: translateX(0px);
+    transition: all var(--transition-alpha);
+    
+}
+
+.c-option--hidden:checked + .c-custom-toggle .c-custom-toggle__fake-input::after {
+    transform: translateX(24px);
+    transition: all var(--transition-alpha);
+}
+
+.c-option--hidden:active + .c-custom-toggle .c-custom-toggle__fake-input,
+.c-option--hidden:focus + .c-custom-toggle .c-custom-toggle__fake-input {
+    box-shadow: var(--global-input-boxShadow);
+    border: var(--global-borderWidth) solid var(--global-input-focus-borderColor);
+}
+
+.c-option--hidden:checked + .c-custom-toggle .c-custom-toggle__fake-input {
+    background-color: var(--global-color-alpha);
+    border-color: var(--global-color-alpha-dark);
+    transition: all var(--transition-alpha);
+}
+
+.c-custom-toggle:hover {
+    --custom-toggle-borderColor: var(--custom-toggle-hover-borderColor);
+}
+
+.c-option--hidden:active + .c-custom-toggle .c-custom-toggle__fake-input::after {
+    width: 28px;
+}
+
+.c-option--hidden:active:checked + .c-custom-toggle .c-custom-toggle__fake-input::after {
+    transform: translateX(18px);
+}
+
+.c-toggle-list__item {
+    margin-bottom: 12px;
+}
+
+.c-toggle-list__item + .c-toggle-list__item {
+    padding-top: 12px;
+}
+
+.c-custom-toggle--inverted {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.c-custom-toggle--inverted .c-custom-toggle__fake-input {
+    margin-right: 0;
+}
+
+/*
+    Component: Custom Select
+    ---
+    Class to put on all form labels
+*/
+
+.c-custom-select {
+    display: block;
+}
+
+.c-custom-select__symbol {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 12px;
+    margin-top: 12px;
+    fill: var(--global-color-neutral-x-light);
+    pointer-events: none;
+}
+
 
 /*
     Component: Label
